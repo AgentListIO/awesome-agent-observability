@@ -1,0 +1,8 @@
+{
+  "name": "awesome-agent-observability",
+  "private": true,
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "check": "bun scripts/build.ts --check"
+  }
+}

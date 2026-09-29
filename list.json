@@ -1,0 +1,164 @@
+{
+  "title": "Awesome Agent Observability",
+  "subtitle": "Understand what happened, and what it cost.",
+  "description": "Agent tracing, evaluation, session inspection, cost tracking, and OpenTelemetry instrumentation.",
+  "scope": "Tools for inspecting agent behavior, measuring usage, or evaluating outcomes. Tracing backends, instrumentation libraries, local session tools, and evaluation frameworks are distinct categories; one does not automatically replace another.",
+  "questions": [
+    "Will it inspect an existing agent session, or does your application need instrumentation?",
+    "Does it capture model calls, tool calls, intermediate decisions, costs, or final outcomes?",
+    "Can traces be exported, sensitive fields redacted, and evaluations reproduced?"
+  ],
+  "sections": [
+    {
+      "title": "Tracing and evaluation platforms",
+      "projects": [
+        {
+          "name": "AgentOps",
+          "url": "https://github.com/AgentOps-AI/agentops",
+          "description": "Agent monitoring platform and SDK for execution traces, debugging, and cost tracking.",
+          "kind": "Platform and SDK",
+          "source": "https://github.com/AgentOps-AI/agentops#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Langfuse",
+          "url": "https://github.com/langfuse/langfuse",
+          "description": "Platform for tracing AI applications, managing prompts, and evaluating runs.",
+          "kind": "Self-hosted or cloud",
+          "source": "https://github.com/langfuse/langfuse#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "LangSmith SDK",
+          "url": "https://github.com/langchain-ai/langsmith-sdk",
+          "description": "Client libraries for sending traces and evaluation data to LangSmith.",
+          "kind": "Platform SDK",
+          "source": "https://github.com/langchain-ai/langsmith-sdk#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Opik",
+          "url": "https://github.com/comet-ml/opik",
+          "description": "Platform for agent traces, evaluation datasets, and experiment monitoring.",
+          "kind": "Self-hosted or cloud",
+          "source": "https://github.com/comet-ml/opik#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Phoenix",
+          "url": "https://github.com/Arize-ai/phoenix",
+          "description": "AI observability platform for traces, evaluation, and dataset experiments.",
+          "kind": "Observability platform",
+          "source": "https://github.com/Arize-ai/phoenix#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Weave",
+          "url": "https://github.com/wandb/weave",
+          "description": "Toolkit for tracing AI application functions and evaluating their outputs.",
+          "kind": "Toolkit and platform",
+          "source": "https://github.com/wandb/weave#readme",
+          "checked": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "title": "Instrumentation",
+      "projects": [
+        {
+          "name": "OpenInference",
+          "url": "https://github.com/Arize-ai/openinference",
+          "description": "OpenTelemetry instrumentation and conventions for AI application traces.",
+          "kind": "Instrumentation libraries",
+          "source": "https://github.com/Arize-ai/openinference#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "OpenLLMetry",
+          "url": "https://github.com/traceloop/openllmetry",
+          "description": "OpenTelemetry extensions for instrumenting LLM applications and their integrations.",
+          "kind": "Instrumentation libraries",
+          "source": "https://github.com/traceloop/openllmetry#readme",
+          "checked": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "title": "Usage and gateway monitoring",
+      "projects": [
+        {
+          "name": "ccusage",
+          "url": "https://github.com/ccusage/ccusage",
+          "description": "CLI reports for coding-agent token usage and estimated costs from local session data.",
+          "kind": "Local CLI",
+          "source": "https://github.com/ccusage/ccusage#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Helicone",
+          "url": "https://github.com/Helicone/helicone",
+          "description": "LLM observability platform for monitoring requests, usage, and experiments.",
+          "kind": "Request monitoring",
+          "source": "https://github.com/Helicone/helicone#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "LiteLLM",
+          "url": "https://github.com/BerriAI/litellm",
+          "description": "Model gateway and SDK with spend tracking, logging, and provider routing.",
+          "kind": "Gateway and SDK",
+          "source": "https://github.com/BerriAI/litellm#readme",
+          "checked": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "title": "Evaluation and regression checks",
+      "projects": [
+        {
+          "name": "DeepEval",
+          "url": "https://github.com/confident-ai/deepeval",
+          "description": "Evaluation framework for testing LLM applications, agent steps, and trajectories.",
+          "kind": "Python framework",
+          "source": "https://github.com/confident-ai/deepeval#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "Promptfoo",
+          "url": "https://github.com/promptfoo/promptfoo",
+          "description": "CLI and library for evaluations and red-team testing of AI applications.",
+          "kind": "CLI and library",
+          "source": "https://github.com/promptfoo/promptfoo#readme",
+          "checked": "2026-09-29"
+        },
+        {
+          "name": "TruLens",
+          "url": "https://github.com/truera/trulens",
+          "description": "Tracing and evaluation tools for examining agent behavior and application outcomes.",
+          "kind": "Evaluation toolkit",
+          "source": "https://github.com/truera/trulens#readme",
+          "checked": "2026-09-29"
+        }
+      ]
+    }
+  ],
+  "related": [
+    {
+      "name": "ContextJet-ai/awesome-llm-observability",
+      "url": "https://github.com/ContextJet-ai/awesome-llm-observability",
+      "description": "Observability tools and practical evaluation resources."
+    },
+    {
+      "name": "tensorchord/Awesome-LLMOps",
+      "url": "https://github.com/tensorchord/Awesome-LLMOps",
+      "description": "The wider LLM operations toolchain."
+    },
+    {
+      "name": "backblaze-labs/awesome-agent-infrastructure",
+      "url": "https://github.com/backblaze-labs/awesome-agent-infrastructure",
+      "description": "Agent infrastructure including observability and evaluation."
+    }
+  ],
+  "slug": "awesome-agent-observability",
+  "checked": "2026-09-29"
+}
