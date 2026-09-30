@@ -17,84 +17,168 @@
       "fit": "Braintrust stores traces in its data plane. Logfire's SDK can export spans to any OpenTelemetry backend instead.",
       "distinction": "A hosted product is the system of record. An SDK that only emits spans leaves retention, access, and redaction to the backend you select.",
       "unknown": "Unknown which Logfire span fields remain when you export to a backend other than the Logfire service.",
-      "source": "https://github.com/pydantic/logfire"
+      "sources": [
+        {
+          "name": "Braintrust",
+          "url": "https://www.braintrust.dev/docs/platform/architecture"
+        },
+        {
+          "name": "Logfire",
+          "url": "https://github.com/pydantic/logfire#readme"
+        }
+      ]
     },
     {
       "need": "If the Braintrust data plane is mine, what does Braintrust still operate?",
       "fit": "Braintrust always operates the control plane. SaaS, BYOC, and self-hosted change only the data plane.",
       "distinction": "SaaS stores data in Braintrust infrastructure. BYOC runs the data plane in your cloud while Braintrust operates it. Self-hosted means you operate that plane. BYOC and self-hosted require Enterprise. The UI stays on the control plane.",
       "unknown": "Unknown how a non-standard self-hosted layout differs from the published artifacts. That path needs a review.",
-      "source": "https://www.braintrust.dev/docs/admin/deployment"
+      "sources": [
+        {
+          "name": "Braintrust",
+          "url": "https://www.braintrust.dev/docs/admin/deployment"
+        }
+      ]
     },
     {
       "need": "Can I offer Phoenix itself as a hosted or managed service?",
       "fit": "Phoenix is the self-hosted trace app. Managed workflows are a separate product, not this repository.",
       "distinction": "The LICENSE file is Elastic License 2.0, not an OSI license, and it bars providing the software to third parties as a hosted or managed service.",
       "unknown": "Unknown which Phoenix features are behind the license-key functionality that the same LICENSE text says not to circumvent.",
-      "source": "https://github.com/Arize-ai/phoenix/blob/main/LICENSE"
+      "sources": [
+        {
+          "name": "Phoenix",
+          "url": "https://github.com/Arize-ai/phoenix/blob/main/LICENSE"
+        }
+      ]
     },
     {
       "need": "Is the whole Langfuse repository under one MIT license?",
       "fit": "Langfuse is the trace platform. Only content outside the ee trees is MIT Expat.",
       "distinction": "The LICENSE file puts ee/, web/src/ee/, and worker/src/ee/ under ee/LICENSE. Calling the whole checkout MIT would overstate that grant.",
       "unknown": "Unknown which product features live only in the ee trees. The LICENSE file does not state retention.",
-      "source": "https://github.com/langfuse/langfuse/blob/main/LICENSE"
+      "sources": [
+        {
+          "name": "Langfuse",
+          "url": "https://github.com/langfuse/langfuse/blob/main/LICENSE"
+        }
+      ]
     },
     {
       "need": "Does Helicone see the prompt, or only a span exported later?",
       "fit": "Helicone's gateway receives the chat request. OpenLLMetry is listed there as a separate async logging path.",
       "distinction": "The quick start sets an OpenAI client base URL to the Helicone gateway, so that request passes through the proxy. Async OpenLLMetry logging is a different integration, not proof of a trace store you run.",
       "unknown": "Unknown whether the async logging path omits prompt text that the gateway receives, and the README does not state retention.",
-      "source": "https://github.com/Helicone/helicone"
+      "sources": [
+        {
+          "name": "Helicone",
+          "url": "https://github.com/Helicone/helicone#readme"
+        },
+        {
+          "name": "OpenLLMetry",
+          "url": "https://github.com/traceloop/openllmetry#readme"
+        }
+      ]
     },
     {
       "need": "Does a local cost report say the agent task succeeded?",
       "fit": "ccusage reads local coding-agent usage files and prints token and cost reports.",
       "distinction": "Daily, weekly, monthly, and session reports are usage measurements. A completed request or a low total is not a judgment that the task helped.",
       "unknown": "Unknown whether any supported source log contains a task-success field. The README documents tokens, cost, and JSON output, not outcome scores.",
-      "source": "https://raw.githubusercontent.com/ccusage/ccusage/main/apps/ccusage/README.md"
+      "sources": [
+        {
+          "name": "ccusage",
+          "url": "https://raw.githubusercontent.com/ccusage/ccusage/main/apps/ccusage/README.md"
+        }
+      ]
     },
     {
       "need": "Does an evaluation library keep the production trace?",
       "fit": "Inspect scores prompts, tools, and dialog. Langfuse and Phoenix are separate trace stores.",
       "distinction": "Inspect is a Python evaluation framework. Its README does not document a trace store, so a model-graded score is not a retained production session.",
       "unknown": "Unknown where Inspect writes eval logs, how long they are kept, and whether Inspect drives a production agent rather than the eval you start.",
-      "source": "https://github.com/UKGovernmentBEIS/inspect_ai"
+      "sources": [
+        {
+          "name": "Inspect",
+          "url": "https://github.com/UKGovernmentBEIS/inspect_ai#readme"
+        },
+        {
+          "name": "Langfuse",
+          "url": "https://github.com/langfuse/langfuse#readme"
+        },
+        {
+          "name": "Phoenix",
+          "url": "https://github.com/Arize-ai/phoenix#readme"
+        }
+      ]
     },
     {
       "need": "Which retention window is stated, and which is not?",
-      "fit": "Braintrust states Starter and Pro windows. Pezzo and Inspect do not on the pages read today.",
+      "fit": "Braintrust states Starter and Pro windows. The Pezzo and Inspect READMEs do not state a retention window.",
       "distinction": "Starter keeps logs and playground data 14 days and cannot extend that. Pro starts at 30 days and can extend it to 180. A missing number is not the same as keeping data forever.",
-      "unknown": "Unknown how a self-hosted bucket policy interacts with these windows. This page does not state Pezzo or Inspect retention or where those tools store logs.",
-      "source": "https://www.braintrust.dev/docs/admin/data-management/retention"
+      "unknown": "Unknown how a self-hosted Braintrust bucket policy interacts with these windows. The Pezzo and Inspect READMEs do not state where logs are stored.",
+      "sources": [
+        {
+          "name": "Braintrust",
+          "url": "https://www.braintrust.dev/docs/admin/data-management/retention"
+        },
+        {
+          "name": "Pezzo",
+          "url": "https://github.com/pezzolabs/pezzo#readme"
+        },
+        {
+          "name": "Inspect",
+          "url": "https://github.com/UKGovernmentBEIS/inspect_ai#readme"
+        }
+      ]
     },
     {
       "need": "Does Latitude's 30-day retention apply when I self-host?",
       "fit": "Latitude states 30-day retention in the hosted quick start, not in the self-host section.",
       "distinction": "The 30-day figure is next to signup for the hosted service. Container-image and Helm self-host instructions do not restate a retention period.",
       "unknown": "Unknown what a self-hosted Latitude install keeps, and whether the hosted 30-day window can be extended.",
-      "source": "https://github.com/latitude-dev/latitude-llm"
+      "sources": [
+        {
+          "name": "Latitude",
+          "url": "https://github.com/latitude-dev/latitude-llm#readme"
+        }
+      ]
     },
     {
       "need": "Does AgentsView only read sessions, or can it start the agent?",
       "fit": "AgentsView syncs local coding-agent sessions into SQLite. It is not itself the agent.",
       "distinction": "The usual server reads existing session files and serves a loopback UI. A separate capture run command can start one non-interactive claude -p or codex exec and does not start the daemon.",
       "unknown": "Unknown how long the local SQLite archive is kept, and which of the many named agents yield only partial transcripts.",
-      "source": "https://github.com/kenn-io/agentsview"
+      "sources": [
+        {
+          "name": "AgentsView",
+          "url": "https://github.com/kenn-io/agentsview#readme"
+        }
+      ]
     },
     {
       "need": "Does Claude Code Agent Monitor only watch sessions?",
       "fit": "Claude Code Agent Monitor reads Claude Code, Cursor, and Codex activity into local SQLite.",
       "distinction": "Hooks and local transcripts feed an Express server at data/dashboard.db. The README also documents an HTTP API that can spawn claude subprocesses, so it is not only a viewer.",
       "unknown": "Unknown how long data/dashboard.db is kept, and whether that run API can start Cursor or Codex as well as claude.",
-      "source": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor"
+      "sources": [
+        {
+          "name": "Claude Code Agent Monitor",
+          "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor#readme"
+        }
+      ]
     },
     {
       "need": "Is the Logfire UI part of the open-source repository?",
       "fit": "Logfire in this catalog is the Python SDK. The platform UI and backend are not in this repo.",
       "distinction": "The server application is closed source, the SDKs can export to any OpenTelemetry backend, and self-hosting that platform requires a purchased enterprise license.",
       "unknown": "Unknown which fields the closed-source UI stores or redacts. The README does not state retention.",
-      "source": "https://github.com/pydantic/logfire"
+      "sources": [
+        {
+          "name": "Logfire",
+          "url": "https://github.com/pydantic/logfire#readme"
+        }
+      ]
     }
   ],
   "sections": [
