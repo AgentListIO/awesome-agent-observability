@@ -21,10 +21,10 @@
     },
     {
       "need": "If the Braintrust data plane is mine, what does Braintrust still operate?",
-      "fit": "Braintrust always operates the control plane. The data plane may be SaaS, BYOC, or self-hosted.",
-      "distinction": "The control plane is UI, auth, and org metadata. The data plane holds traces and prompts. On the self-host architecture page, org-level LLM provider secrets stay on the control plane and project-level secrets stay on the data plane.",
-      "unknown": "Unknown whether the SaaS deployment stores org-level provider secrets the same way; that split was read on the self-host architecture page.",
-      "source": "https://www.braintrust.dev/docs/admin/self-hosting/architecture"
+      "fit": "Braintrust always operates the control plane. SaaS, BYOC, and self-hosted change only the data plane.",
+      "distinction": "SaaS stores data in Braintrust infrastructure. BYOC runs the data plane in your cloud while Braintrust operates it. Self-hosted means you operate that plane. BYOC and self-hosted require Enterprise. The UI stays on the control plane.",
+      "unknown": "Unknown how a non-standard self-hosted layout differs from the published artifacts. That path needs a review.",
+      "source": "https://www.braintrust.dev/docs/admin/deployment"
     },
     {
       "need": "Can I offer Phoenix itself as a hosted or managed service?",
@@ -136,9 +136,9 @@
         {
           "name": "Braintrust",
           "url": "https://www.braintrust.dev/docs",
-          "description": "Tracing and evaluation product. Braintrust operates the control plane. The data plane is SaaS, BYOC in your cloud, or self-hosted, and BYOC and self-hosting are Enterprise. Starter retention is 14 days and cannot be extended. Pro starts at 30 days and can extend to 180. Organization-level model-provider secrets stay on the control plane.",
+          "description": "Tracing and evaluation product. The control plane is Braintrust-managed SaaS. A customer-hosted data plane can run in your AWS, GCP, or Azure account, operated by Braintrust or by your team. SDKs send events directly to that data plane. The browser UI connects to the same plane. Org-level provider secrets stay on the control plane.",
           "kind": "Tracing platform",
-          "source": "https://www.braintrust.dev/docs",
+          "source": "https://www.braintrust.dev/docs/platform/architecture",
           "checked": "2026-09-30"
         },
         {
