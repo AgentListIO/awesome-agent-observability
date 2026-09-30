@@ -10,6 +10,10 @@
 
 14 projects · Upstream documentation checked 2026-09-29. Curated by [agentlist.io](https://www.agentlist.io).
 
+**Understand what your agent did, and whether it helped.**
+
+Start with the question you cannot answer today: why a run failed, where the cost went, which tool call caused trouble, or whether a change improved the result. Traces, evaluations, and cost reports answer different questions. Choose the evidence you need before choosing a dashboard.
+
 Tools for inspecting agent behavior, measuring usage, or evaluating outcomes. Tracing backends, instrumentation libraries, local session tools, and evaluation frameworks are distinct categories; one does not automatically replace another.
 
 ## Contents
@@ -25,9 +29,14 @@ Tools for inspecting agent behavior, measuring usage, or evaluating outcomes. Tr
 
 ## How to choose
 
-- Will it inspect an existing agent session, or does your application need instrumentation?
-- Does it capture model calls, tool calls, intermediate decisions, costs, or final outcomes?
-- Can traces be exported, sensitive fields redacted, and evaluations reproduced?
+- Works with: Does it capture your agent framework, model calls, and tools? Can you instrument custom steps and export standard telemetry?
+- Runs where: Where are traces stored and evaluations executed? Which features are available when self-hosted?
+- Needs access to: Will prompts, outputs, files, or credentials appear in telemetry? What redaction and access controls can you configure?
+- Keeps what: Can you retain and export traces, datasets, evaluation results, and cost records? What are the retention boundaries?
+- Human involvement: Can you follow a failed run, review examples, and turn findings into regression checks? Who reviews automated evaluation judgments?
+- Main limitation: Which steps or costs remain invisible? A successful request, a low bill, and a useful task outcome are different measurements.
+
+Use these questions to narrow your shortlist. An entry’s source link records the documentation used for its description; it does not mean every question above has been answered or tested. Treat undocumented capabilities as unknown, and confirm requirements against the linked project before adopting it.
 
 ## Tracing and evaluation platforms
 
