@@ -55,6 +55,7 @@ Use these questions to narrow your shortlist. An entry’s source link records t
 ## Usage and gateway monitoring
 
 - [ccusage](https://github.com/ccusage/ccusage) - CLI reports for coding-agent token usage and estimated costs from local session data. **Local CLI.**
+- [OpenClaw Monitor](https://github.com/flik2002/openclaw-monitor) - Free open-source web dashboard for OpenClaw AI agent sessions: token usage, session tracking, 7-day trends, and multi-model support. **Local web UI.**
 - [Helicone](https://github.com/Helicone/helicone) - LLM observability platform for monitoring requests, usage, and experiments. **Request monitoring.**
 - [LiteLLM](https://github.com/BerriAI/litellm) - Model gateway and SDK with spend tracking, logging, and provider routing. **Gateway and SDK.**
 
