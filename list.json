@@ -11,6 +11,176 @@
     "Human involvement: Can you follow a failed run, review examples, and turn findings into regression checks? Who reviews automated evaluation judgments?",
     "Main limitation: Which steps or costs remain invisible? A successful request, a low bill, and a useful task outcome are different measurements."
   ],
+  "decisions": [
+    {
+      "need": "Does adding a client library also choose where traces are stored?",
+      "fit": "Braintrust stores traces in its data plane. Logfire's SDK can export spans to any OpenTelemetry backend instead.",
+      "distinction": "A hosted product is the system of record. An SDK that only emits spans leaves retention, access, and redaction to the backend you select.",
+      "unknown": "Unknown which Logfire span fields remain when you export to a backend other than the Logfire service.",
+      "sources": [
+        {
+          "name": "Braintrust",
+          "url": "https://www.braintrust.dev/docs/platform/architecture"
+        },
+        {
+          "name": "Logfire",
+          "url": "https://github.com/pydantic/logfire#readme"
+        }
+      ]
+    },
+    {
+      "need": "If the Braintrust data plane is mine, what does Braintrust still operate?",
+      "fit": "Braintrust always operates the control plane. SaaS, BYOC, and self-hosted change only the data plane.",
+      "distinction": "SaaS stores data in Braintrust infrastructure. BYOC runs the data plane in your cloud while Braintrust operates it. Self-hosted means you operate that plane. BYOC and self-hosted require Enterprise. The UI stays on the control plane.",
+      "unknown": "Unknown how a non-standard self-hosted layout differs from the published artifacts. That path needs a review.",
+      "sources": [
+        {
+          "name": "Braintrust",
+          "url": "https://www.braintrust.dev/docs/admin/deployment"
+        }
+      ]
+    },
+    {
+      "need": "Can I offer Phoenix itself as a hosted or managed service?",
+      "fit": "Phoenix is the self-hosted trace app. Managed workflows are a separate product, not this repository.",
+      "distinction": "The LICENSE file is Elastic License 2.0, not an OSI license, and it bars providing the software to third parties as a hosted or managed service.",
+      "unknown": "Unknown which Phoenix features are behind the license-key functionality that the same LICENSE text says not to circumvent.",
+      "sources": [
+        {
+          "name": "Phoenix",
+          "url": "https://github.com/Arize-ai/phoenix/blob/main/LICENSE"
+        }
+      ]
+    },
+    {
+      "need": "Is the whole Langfuse repository under one MIT license?",
+      "fit": "Langfuse is the trace platform. Only content outside the ee trees is MIT Expat.",
+      "distinction": "The LICENSE file puts ee/, web/src/ee/, and worker/src/ee/ under ee/LICENSE. Calling the whole checkout MIT would overstate that grant.",
+      "unknown": "Unknown which product features live only in the ee trees. The LICENSE file does not state retention.",
+      "sources": [
+        {
+          "name": "Langfuse",
+          "url": "https://github.com/langfuse/langfuse/blob/main/LICENSE"
+        }
+      ]
+    },
+    {
+      "need": "Does Helicone see the prompt, or only a span exported later?",
+      "fit": "Helicone's gateway receives the chat request. OpenLLMetry is listed there as a separate async logging path.",
+      "distinction": "The quick start sets an OpenAI client base URL to the Helicone gateway, so that request passes through the proxy. Async OpenLLMetry logging is a different integration, not proof of a trace store you run.",
+      "unknown": "Unknown whether the async logging path omits prompt text that the gateway receives, and the README does not state retention.",
+      "sources": [
+        {
+          "name": "Helicone",
+          "url": "https://github.com/Helicone/helicone#readme"
+        },
+        {
+          "name": "OpenLLMetry",
+          "url": "https://github.com/traceloop/openllmetry#readme"
+        }
+      ]
+    },
+    {
+      "need": "Does a local cost report say the agent task succeeded?",
+      "fit": "ccusage reads local coding-agent usage files and prints token and cost reports.",
+      "distinction": "Daily, weekly, monthly, and session reports are usage measurements. A completed request or a low total is not a judgment that the task helped.",
+      "unknown": "Unknown whether any supported source log contains a task-success field. The README documents tokens, cost, and JSON output, not outcome scores.",
+      "sources": [
+        {
+          "name": "ccusage",
+          "url": "https://raw.githubusercontent.com/ccusage/ccusage/main/apps/ccusage/README.md"
+        }
+      ]
+    },
+    {
+      "need": "Does an evaluation library keep the production trace?",
+      "fit": "Inspect scores prompts, tools, and dialog. Langfuse and Phoenix are separate trace stores.",
+      "distinction": "Inspect is a Python evaluation framework. Its README does not document a trace store, so a model-graded score is not a retained production session.",
+      "unknown": "Unknown where Inspect writes eval logs, how long they are kept, and whether Inspect drives a production agent rather than the eval you start.",
+      "sources": [
+        {
+          "name": "Inspect",
+          "url": "https://github.com/UKGovernmentBEIS/inspect_ai#readme"
+        },
+        {
+          "name": "Langfuse",
+          "url": "https://github.com/langfuse/langfuse#readme"
+        },
+        {
+          "name": "Phoenix",
+          "url": "https://github.com/Arize-ai/phoenix#readme"
+        }
+      ]
+    },
+    {
+      "need": "Which retention window is stated, and which is not?",
+      "fit": "Braintrust states Starter and Pro windows. The Pezzo and Inspect READMEs do not state a retention window.",
+      "distinction": "Starter keeps logs and playground data 14 days and cannot extend that. Pro starts at 30 days and can extend it to 180. A missing number is not the same as keeping data forever.",
+      "unknown": "Unknown how a self-hosted Braintrust bucket policy interacts with these windows. The Pezzo and Inspect READMEs do not state where logs are stored.",
+      "sources": [
+        {
+          "name": "Braintrust",
+          "url": "https://www.braintrust.dev/docs/admin/data-management/retention"
+        },
+        {
+          "name": "Pezzo",
+          "url": "https://github.com/pezzolabs/pezzo#readme"
+        },
+        {
+          "name": "Inspect",
+          "url": "https://github.com/UKGovernmentBEIS/inspect_ai#readme"
+        }
+      ]
+    },
+    {
+      "need": "Does Latitude's 30-day retention apply when I self-host?",
+      "fit": "Latitude states 30-day retention in the hosted quick start, not in the self-host section.",
+      "distinction": "The 30-day figure is next to signup for the hosted service. Container-image and Helm self-host instructions do not restate a retention period.",
+      "unknown": "Unknown what a self-hosted Latitude install keeps, and whether the hosted 30-day window can be extended.",
+      "sources": [
+        {
+          "name": "Latitude",
+          "url": "https://github.com/latitude-dev/latitude-llm#readme"
+        }
+      ]
+    },
+    {
+      "need": "Does AgentsView only read sessions, or can it start the agent?",
+      "fit": "AgentsView syncs local coding-agent sessions into SQLite. It is not itself the agent.",
+      "distinction": "The usual server reads existing session files and serves a loopback UI. A separate capture run command can start one non-interactive claude -p or codex exec and does not start the daemon.",
+      "unknown": "Unknown how long the local SQLite archive is kept, and which of the many named agents yield only partial transcripts.",
+      "sources": [
+        {
+          "name": "AgentsView",
+          "url": "https://github.com/kenn-io/agentsview#readme"
+        }
+      ]
+    },
+    {
+      "need": "Does Claude Code Agent Monitor only watch sessions?",
+      "fit": "Claude Code Agent Monitor reads Claude Code, Cursor, and Codex activity into local SQLite.",
+      "distinction": "Hooks and local transcripts feed an Express server at data/dashboard.db. The README also documents an HTTP API that can spawn claude subprocesses, so it is not only a viewer.",
+      "unknown": "Unknown how long data/dashboard.db is kept, and whether that run API can start Cursor or Codex as well as claude.",
+      "sources": [
+        {
+          "name": "Claude Code Agent Monitor",
+          "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor#readme"
+        }
+      ]
+    },
+    {
+      "need": "Is the Logfire UI part of the open-source repository?",
+      "fit": "Logfire in this catalog is the Python SDK. The platform UI and backend are not in this repo.",
+      "distinction": "The server application is closed source, the SDKs can export to any OpenTelemetry backend, and self-hosting that platform requires a purchased enterprise license.",
+      "unknown": "Unknown which fields the closed-source UI stores or redacts. The README does not state retention.",
+      "sources": [
+        {
+          "name": "Logfire",
+          "url": "https://github.com/pydantic/logfire#readme"
+        }
+      ]
+    }
+  ],
   "sections": [
     {
       "title": "Tracing and evaluation platforms",
@@ -18,50 +188,146 @@
         {
           "name": "AgentOps",
           "url": "https://github.com/AgentOps-AI/agentops",
-          "description": "Agent monitoring platform and SDK for execution traces, debugging, and cost tracking.",
-          "kind": "Platform and SDK",
+          "description": "Python SDK and app directory for session traces, replays, and LLM cost tracking. It names CrewAI, AG2 (AutoGen), Agno, LangGraph, the OpenAI Agents SDK, CAMEL, and LangChain via the GitHub description. Sessions show on a dashboard after an API key. The dashboard and API can be self-hosted under MIT. Where a hosted account stores data is not stated.",
+          "kind": "Python SDK and app",
           "source": "https://github.com/AgentOps-AI/agentops#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Langfuse",
           "url": "https://github.com/langfuse/langfuse",
-          "description": "Platform for tracing AI applications, managing prompts, and evaluating runs.",
+          "description": "Platform for LLM traces, prompt versions, datasets, and evaluations, including LLM-as-a-judge, code evaluators, user feedback, and manual labels. Langfuse Cloud and self-hosting via Docker Compose, a VM, or Helm are documented, with Python and JS/TS SDKs. Outside ee/, web/src/ee/, and worker/src/ee/ the license is MIT Expat; those paths are under ee/LICENSE. The LICENSE file does not state retention.",
           "kind": "Self-hosted or cloud",
           "source": "https://github.com/langfuse/langfuse#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "LangSmith",
+          "url": "https://docs.langchain.com/langsmith/observability",
+          "description": "Product for traces, datasets, and evaluation. It can run as cloud, hybrid, or self-hosted, and people can annotate traces. The open repository langchain-ai/langsmith-sdk is the client SDK, listed separately, and is not the server. This entry does not give a retention limit for each deployment mode.",
+          "kind": "Tracing platform",
+          "source": "https://docs.langchain.com/langsmith/observability",
+          "checked": "2026-09-30"
         },
         {
           "name": "LangSmith SDK",
           "url": "https://github.com/langchain-ai/langsmith-sdk",
-          "description": "Client libraries for sending traces and evaluation data to LangSmith.",
+          "description": "Python and JavaScript client for the LangSmith platform, not the server. Set an API key and workspace id, wrap clients such as OpenAI, or mark functions so traces and evaluation calls go to LangSmith, including a native LangChain path. Retention, deployment mode, and where the platform stores prompts are not documented here; they belong to the product, listed separately.",
           "kind": "Platform SDK",
           "source": "https://github.com/langchain-ai/langsmith-sdk#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Braintrust",
+          "url": "https://www.braintrust.dev/docs",
+          "description": "Tracing and evaluation product. The control plane is Braintrust-managed SaaS. A customer-hosted data plane can run in your AWS, GCP, or Azure account, operated by Braintrust or by your team. SDKs send events directly to that data plane. The browser UI connects to the same plane. Org-level provider secrets stay on the control plane.",
+          "kind": "Tracing platform",
+          "source": "https://www.braintrust.dev/docs/platform/architecture",
+          "checked": "2026-09-30"
         },
         {
           "name": "Opik",
           "url": "https://github.com/comet-ml/opik",
-          "description": "Platform for agent traces, evaluation datasets, and experiment monitoring.",
+          "description": "Platform for agent and LLM traces, datasets, experiments, prompt playground runs, and evaluations, with human feedback scores and LLM-as-a-judge checks. The server, web app, and those core pieces are Apache-2.0 and can be self-hosted, and the client can target Opik Cloud. Annotation is in the UI or Python SDK, with a pytest hook for CI. No retention limit is stated.",
           "kind": "Self-hosted or cloud",
           "source": "https://github.com/comet-ml/opik#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Phoenix",
           "url": "https://github.com/Arize-ai/phoenix",
-          "description": "AI observability platform for traces, evaluation, and dataset experiments.",
-          "kind": "Observability platform",
+          "description": "Self-hosted app for OpenTelemetry traces, datasets, experiments, prompt versions, and evaluations. You run Phoenix yourself, locally or in your container or cloud account. Managed workflows are Arize AX, a separate product, using the same OpenInference instrumentation. LICENSE is Elastic License 2.0, not OSI, and you cannot offer the software as a hosted or managed service. No retention period is stated.",
+          "kind": "Self-hosted platform",
           "source": "https://github.com/Arize-ai/phoenix#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Weave",
           "url": "https://github.com/wandb/weave",
-          "description": "Toolkit for tracing AI application functions and evaluating their outputs.",
-          "kind": "Toolkit and platform",
+          "description": "Weights & Biases Python toolkit for tracing functions and evaluating language-model apps. A Weights & Biases account is required. weave.init takes a project name, and decorated functions log inputs, outputs, and traces to that service. No self-hosted Weave server is documented in this repository. Older engine code is described as paused while the project focuses on tracing and evaluations.",
+          "kind": "Python toolkit",
           "source": "https://github.com/wandb/weave#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Laminar",
+          "url": "https://github.com/lmnr-ai/lmnr",
+          "description": "Observability platform for agent traces, plain-language behavior signals, annotation, datasets, and evaluations, with SQL over span data. A managed service and a Docker Compose self-host are documented. The SDK is OpenTelemetry-native for the Vercel AI SDK, LangChain, OpenAI, and Anthropic. Self-hosted installs send anonymized product telemetry unless LAMINAR_TELEMETRY_DISABLED is set. How long trace payloads are kept is not stated.",
+          "kind": "Self-hosted or cloud",
+          "source": "https://github.com/lmnr-ai/lmnr#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Logfire",
+          "url": "https://github.com/pydantic/logfire",
+          "description": "Python SDK for an OpenTelemetry observability platform. This repository is the SDK, not the server: the UI and backend are closed source. Spans can go to the Logfire service after logfire auth, or to any OpenTelemetry backend. Self-hosting the platform requires a purchased enterprise license. It covers ordinary Python telemetry plus LLM and agent apps. Retention is not stated.",
+          "kind": "Python SDK",
+          "source": "https://github.com/pydantic/logfire#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "LangWatch",
+          "url": "https://github.com/langwatch/langwatch",
+          "description": "Platform for LLM traces, simulation tests, evaluations, prompt management, and an OpenAI-compatible gateway, with session and cost views for Claude Code, Codex, GitHub Copilot, and OpenCode. LangWatch Cloud and a self-host command are documented. Apache 2.0 applies; modules under platform/app/ee/ need a commercial license in production, and the SDKs are MIT. Self-hosted gateway gaps and trace retention are not stated.",
+          "kind": "Self-hosted or cloud",
+          "source": "https://github.com/langwatch/langwatch#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Latitude",
+          "url": "https://github.com/latitude-dev/latitude-llm",
+          "description": "App for multi-turn sessions, tool calls, and OpenTelemetry traces, with failing traces grouped into signals. TypeScript or Python clients target the hosted service or container-image self-hosting. The hosted quick start states 30-day data retention. Container-image self-hosting does not restate 30 days. It can dispatch Claude Code or Cursor with sample traces to open a pull request. The license is MIT.",
+          "kind": "Self-hosted or cloud",
+          "source": "https://github.com/latitude-dev/latitude-llm#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "OpenLIT",
+          "url": "https://github.com/openlit/openlit",
+          "description": "OpenTelemetry app you run with Docker Compose, plus Python and TypeScript SDKs exporting traces and metrics to your collector. Spans cover LLM calls, tools, prompts, tokens, and cost, plus LLM-as-a-judge checks such as hallucination and toxicity. A coding-agent path covers Claude Code, Cursor, and Codex. The quick-start dashboard runs where you start the stack. No retention limit is stated.",
+          "kind": "Self-hosted platform",
+          "source": "https://github.com/openlit/openlit#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Future AGI",
+          "url": "https://github.com/future-agi/future-agi",
+          "description": "Platform for tracing, evaluations, simulations, guardrails, and an OpenAI-compatible gateway, with managed cloud and self-host paths. The core is Apache 2.0. A standalone install uses Postgres and ClickHouse. This checkout is a nightly release with rough edges. traceAI, listed separately, sends OpenTelemetry to your collector. Standalone data cannot move to the distributed layout later. No retention period is stated.",
+          "kind": "Self-hosted or cloud",
+          "source": "https://github.com/future-agi/future-agi#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Failproof",
+          "url": "https://github.com/FailproofAI/failproofai",
+          "description": "Local hooks and a dashboard for run history, plus policy checks that can block a tool call before it runs. It attaches to Claude Code, Codex, Cursor, Hermes, and OpenClaw, and serves traces on localhost without an account. A hosted fleet view's self-host option is on an enterprise plan. The license is MIT with a Commons Clause limiting commercial resale.",
+          "kind": "Local hooks and dashboard",
+          "source": "https://github.com/FailproofAI/failproofai#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Pezzo",
+          "url": "https://github.com/pezzolabs/pezzo",
+          "description": "LLMOps app for prompt versions and request observability. Node.js, Python, and LangChain clients are marked for prompt management, observability, and caching. The stack can run locally with Docker Compose on Postgres, ClickHouse, Redis, and SuperTokens, and the source is Apache 2.0. It does not document retention, a review step, or agent instrumentation beyond LangChain.",
+          "kind": "Self-hosted LLMOps app",
+          "source": "https://github.com/pezzolabs/pezzo#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "MLflow",
+          "url": "https://github.com/mlflow/mlflow",
+          "description": "Tracking server for ML experiments and LLM and agent traces, broader than agent observability. You can start a local server, enable autolog for clients such as OpenAI, and use OpenTelemetry, evaluations, prompt versions, and an OpenAI-compatible gateway. A setup wizard can also target Databricks. Retention is not stated. Experiment tracking or deployment does not by itself explain an agent trajectory.",
+          "kind": "Tracking server",
+          "source": "https://github.com/mlflow/mlflow#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Langtrace",
+          "url": "https://github.com/Scale3-Labs/langtrace",
+          "description": "OpenTelemetry app for LLM, vector, and framework traces, with metrics and evaluations. There is a cloud signup and a self-host path. The application in this repository is AGPL-3.0. The separate Python and TypeScript SDKs are Apache-2.0. A self-hosted install does not send telemetry off your servers. No retention period is stated.",
+          "kind": "Tracing and eval app",
+          "source": "https://github.com/Scale3-Labs/langtrace#readme",
+          "checked": "2026-09-30"
         }
       ]
     },
@@ -71,18 +337,26 @@
         {
           "name": "OpenInference",
           "url": "https://github.com/Arize-ai/openinference",
-          "description": "OpenTelemetry instrumentation and conventions for AI application traces.",
+          "description": "OpenTelemetry conventions and instrumentation plugins for LLM calls, retrieval, and tools, not a trace store. Phoenix and Arize AX accept this format natively, and any OpenTelemetry-compatible backend can receive it, with libraries in more than one language. Spans can carry prompts, retrieved context, and tool calls. Redaction is not documented, and you still choose where those spans are kept.",
           "kind": "Instrumentation libraries",
           "source": "https://github.com/Arize-ai/openinference#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "OpenLLMetry",
           "url": "https://github.com/traceloop/openllmetry",
-          "description": "OpenTelemetry extensions for instrumenting LLM applications and their integrations.",
+          "description": "OpenTelemetry instrumentations and Python SDK for LLM providers, vector stores, and agent frameworks, maintained under Apache 2.0. Traceloop.init emits standard OpenTelemetry. Traces can go to Traceloop or other backends, including Datadog, Grafana, Braintrust, Laminar, and an OpenTelemetry collector. A separate JavaScript repository holds that SDK. Redaction and retention depend on the backend you select and are not set here.",
           "kind": "Instrumentation libraries",
           "source": "https://github.com/traceloop/openllmetry#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "traceAI",
+          "url": "https://github.com/future-agi/traceAI",
+          "description": "OpenTelemetry instrumentation for LLM calls, prompts, tokens, retrieval, and agent or tool steps. Not a dashboard and not the Future AGI product. Traces go to the OpenTelemetry backend you configure, including Datadog, Grafana, Jaeger, and Future AGI. Packages exist for Python, TypeScript, Java, and C. Captured prompts are visible to that backend's operator, and retention is not set here.",
+          "kind": "OTel instrumentation",
+          "source": "https://github.com/future-agi/traceAI#readme",
+          "checked": "2026-09-30"
         }
       ]
     },
@@ -92,26 +366,26 @@
         {
           "name": "ccusage",
           "url": "https://github.com/ccusage/ccusage",
-          "description": "CLI reports for coding-agent token usage and estimated costs from local session data.",
+          "description": "Local CLI for daily, weekly, monthly, and session cost reports from usage files coding-agent CLIs store. Sources include Claude Code, Codex, OpenCode, Hermes Agent, Goose, OpenClaw, Copilot CLI, Gemini CLI, and others, with JSON via --json. GitHub's license field was null on 2026-09-30. It does not call the models. A cost report is not a judgment that the task succeeded.",
           "kind": "Local CLI",
           "source": "https://github.com/ccusage/ccusage#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Helicone",
           "url": "https://github.com/Helicone/helicone",
-          "description": "LLM observability platform for monitoring requests, usage, and experiments.",
-          "kind": "Request monitoring",
+          "description": "Proxy and app for LLM request logs, cost, latency, and agent session traces. The quick start points an OpenAI client at the gateway so requests pass through, and a separate path logs asynchronously through OpenLLMetry. Hosted and Docker Compose self-host are documented, with no feature-gap list. The license is Apache-2.0. A logged request is not evidence the task was useful.",
+          "kind": "Proxy and app",
           "source": "https://github.com/Helicone/helicone#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "LiteLLM",
           "url": "https://github.com/BerriAI/litellm",
-          "description": "Model gateway and SDK with spend tracking, logging, and provider routing.",
+          "description": "Python SDK and proxy that present many model providers through one OpenAI-shaped API, broader than agent tracing. Clients post chat messages through the gateway you run, with provider keys configured there, so the proxy sees those messages. Outside enterprise/ the license is MIT; that directory, if present, has its own license. How long request logs are kept is not stated.",
           "kind": "Gateway and SDK",
           "source": "https://github.com/BerriAI/litellm#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         }
       ]
     },
@@ -121,26 +395,111 @@
         {
           "name": "DeepEval",
           "url": "https://github.com/confident-ai/deepeval",
-          "description": "Evaluation framework for testing LLM applications, agent steps, and trajectories.",
+          "description": "Python framework for pytest-style checks on LLM apps, RAG pipelines, and agent trajectories, including task completion and tool-call metrics. Metrics can use an LLM-as-a-judge or local models. Hooks cover LangChain, LangGraph, CrewAI, Pydantic AI, and the OpenAI Agents SDK. Confident AI is a separate hosted product for shared reports. A judge score is not a stored trace.",
           "kind": "Python framework",
           "source": "https://github.com/confident-ai/deepeval#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "Promptfoo",
           "url": "https://github.com/promptfoo/promptfoo",
-          "description": "CLI and library for evaluations and red-team testing of AI applications.",
+          "description": "CLI and library for prompt and model evaluations, CI checks, and red-team scans, not a tracing backend. It is MIT licensed. Local evals keep prompts on your machine. Providers include OpenAI, Anthropic, Bedrock, and Ollama. Team sharing omits the destination. A red-team report is not a live agent session. No sign-off rule for a failing case is stated.",
           "kind": "CLI and library",
           "source": "https://github.com/promptfoo/promptfoo#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
         },
         {
           "name": "TruLens",
           "url": "https://github.com/truera/trulens",
-          "description": "Tracing and evaluation tools for examining agent behavior and application outcomes.",
-          "kind": "Evaluation toolkit",
+          "description": "Python toolkit recording per-step inputs, outputs, tokens, and cost as OpenTelemetry spans, scored with LLM judges. Spans export to any OTLP backend, including Jaeger, Grafana Tempo, Datadog, and New Relic. Evaluations run live or later over a dataset. It covers RAG checks and agent steps. No retention is stated, and it does not require a person to approve judge scores.",
+          "kind": "Python toolkit",
           "source": "https://github.com/truera/trulens#readme",
-          "checked": "2026-09-29"
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Inspect",
+          "url": "https://github.com/UKGovernmentBEIS/inspect_ai",
+          "description": "Python evaluation framework from the UK AI Security Institute for prompts, tool use, multi-turn dialog, and model-graded scoring. Other packages can supply extensions, and pre-built evaluations can run on a model you choose. Execution is the Python process you start. It is not a tracing backend. Eval log storage, retention, and export format are not documented.",
+          "kind": "Python framework",
+          "source": "https://github.com/UKGovernmentBEIS/inspect_ai#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Evidently",
+          "url": "https://github.com/evidentlyai/evidently",
+          "description": "Python library for data, ML, and LLM checks, broader than agent traces. You can compute reports and pass/fail test suites, including LLM-as-a-judge text evals, and export JSON, a Python dictionary, or HTML. Results can be viewed in a self-hosted monitoring UI or Evidently Cloud. It also covers tabular drift. Agent-framework instrumentation and a cloud retention limit are not documented.",
+          "kind": "Python library",
+          "source": "https://github.com/evidentlyai/evidently#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Giskard",
+          "url": "https://github.com/Giskard-AI/giskard-oss",
+          "description": "Python libraries for agent checks and vulnerability scans that generate adversarial cases from a plain-language description. Version 3 targets multi-turn agents and RAG quality. Checks run against a callable you supply. Optional telemetry sends aggregated analytics, not prompts or outputs, unless enabled. Older v2 tabular code is no longer maintained. Not a tracing backend; no hosted trace store is documented.",
+          "kind": "Python libraries",
+          "source": "https://github.com/Giskard-AI/giskard-oss#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Prompt flow",
+          "url": "https://github.com/microsoft/promptflow",
+          "description": "Microsoft toolkit for building, batch-testing, and evaluating LLM flows, broader than agent tracing. You create a flow locally with the pf CLI, store an API key in a connection, and run interactive tests. You can deploy the flow or use optional Azure AI cloud for team collaboration. Evaluation is added to the flow and CI. Agent-session retention is not documented.",
+          "kind": "Python toolkit",
+          "source": "https://github.com/microsoft/promptflow#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "DeepTeam",
+          "url": "https://github.com/confident-ai/deepteam",
+          "description": "Python red-team framework for LLM apps and agents, built on DeepEval, not a tracing backend. It runs locally, attacks vulnerabilities you select, and scores them with an LLM-as-a-judge that needs a model key. Confident AI is a separate product for storing and sharing reports. Retention here is not documented. A failed case is not a normal user-session trace.",
+          "kind": "Python framework",
+          "source": "https://github.com/confident-ai/deepteam#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "OpenEvals",
+          "url": "https://github.com/langchain-ai/openevals",
+          "description": "Python and JavaScript package of ready-made evaluators, including LLM-as-a-judge prompts and checks for strings or structured output. Agent-specific evals live in the separate langchain-ai/agentevals repository. A judge call needs a model client, with LangChain chat models as the default. It does not record traces, retain datasets, or require a person to review the judge comment.",
+          "kind": "Python and JS library",
+          "source": "https://github.com/langchain-ai/openevals#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Ragas",
+          "url": "https://github.com/vibrantlabsai/ragas",
+          "description": "Python toolkit for evaluating retrieval-augmented generation, which is broader than agent traces. The project is now at vibrantlabsai/ragas. It documents metrics, test-set generation, and a RAG evaluation quick start. Agent-eval templates are still marked coming soon. No trace store is documented, and no retention period is stated.",
+          "kind": "Python library",
+          "source": "https://github.com/vibrantlabsai/ragas#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Kitaru",
+          "url": "https://github.com/zenml-io/kitaru",
+          "description": "Replay-based server for agent sessions: record or import runs, then re-execute against a later prompt, model, or code change. Imports include Langfuse, LangSmith, Braintrust, Logfire, Phoenix, and MLflow. Adapters cover PydanticAI, LangGraph, OpenAI Agents SDK, and Claude Agent SDK. Replays run on your workers. Local Docker, Podman, and managed cloud are under Apache 2.0. A person calibrates evaluators with judgments.",
+          "kind": "Replay eval server",
+          "source": "https://github.com/zenml-io/kitaru#readme",
+          "checked": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "title": "Local session inspection",
+      "projects": [
+        {
+          "name": "AgentsView",
+          "url": "https://github.com/kenn-io/agentsview",
+          "description": "Local desktop and CLI for coding-agent sessions and token cost. First run syncs sessions into local SQLite and serves loopback UI. The archive stays local unless shared. Agents include Claude Code, Codex, Cursor, and others, with Aider opt-in and Amp deprecated. Capture run can start one non-interactive claude -p or codex exec without starting the daemon. No retention is stated.",
+          "kind": "Local desktop and CLI",
+          "source": "https://github.com/kenn-io/agentsview#readme",
+          "checked": "2026-09-30"
+        },
+        {
+          "name": "Claude Code Agent Monitor",
+          "url": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor",
+          "description": "Local dashboard for Claude Code, Cursor, and Codex activity. Native hooks for Claude Code and Codex, plus local Cursor transcripts, feed an Express server with SQLite at data/dashboard.db. A desktop app, MCP server, JSON export, and HTTP API that can spawn claude are documented. That run API is not documented as spawning Cursor or Codex. No retention window is stated.",
+          "kind": "Local dashboard",
+          "source": "https://github.com/hoangsonww/Claude-Code-Agent-Monitor#readme",
+          "checked": "2026-09-30"
         }
       ]
     }
@@ -149,20 +508,30 @@
     {
       "name": "ContextJet-ai/awesome-llm-observability",
       "url": "https://github.com/ContextJet-ai/awesome-llm-observability",
-      "description": "Observability tools and practical evaluation resources."
+      "description": "LLM observability links plus skills from the list's own author. Useful leads, not an independent audit."
     },
     {
       "name": "tensorchord/Awesome-LLMOps",
       "url": "https://github.com/tensorchord/Awesome-LLMOps",
-      "description": "The wider LLM operations toolchain."
+      "description": "Broad LLMOps list. Many rows are training, serving, or gateways rather than agent tracing."
     },
     {
       "name": "backblaze-labs/awesome-agent-infrastructure",
       "url": "https://github.com/backblaze-labs/awesome-agent-infrastructure",
-      "description": "Agent infrastructure including observability and evaluation."
+      "description": "Cross-cutting infrastructure list. Thin on tracers specifically."
+    },
+    {
+      "name": "dyronrh/awesome-agentops-landscape",
+      "url": "https://github.com/dyronrh/awesome-agentops-landscape",
+      "description": "Comparison tables of agent operations tools. At least one cell has been wrong: Helicone was marked non-open-source while its repository license is Apache-2.0. Use the links, not the cells."
+    },
+    {
+      "name": "InftyAI/Awesome-LLMOps",
+      "url": "https://github.com/InftyAI/Awesome-LLMOps",
+      "description": "LLMOps tool list, separate from the TensorChord list, and broader than agent tracing."
     }
   ],
   "slug": "awesome-agent-observability",
-  "checked": "2026-09-29",
+  "checked": "2026-09-30",
   "introduction": "Start with the question you cannot answer today: why a run failed, where the cost went, which tool call caused trouble, or whether a change improved the result. Traces, evaluations, and cost reports answer different questions. Choose the evidence you need before choosing a dashboard."
 }
